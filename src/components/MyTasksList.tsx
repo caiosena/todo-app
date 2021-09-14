@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, TouchableOpacity, View, Text, StyleSheet, FlatListProps } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 function FlatListHeaderComponent() {
   return (
@@ -21,37 +22,51 @@ interface MyTasksListProps {
 
 export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
   return (
-    <FlatList
-      data={tasks}
-      keyExtractor={item => String(item.id)}
-      renderItem={({ item, index }) => {
-        return (
-          <TouchableOpacity
-            testID={`button-${index}`}
-            activeOpacity={0.7}
-            //TODO - use onPress, onLongPress and style props
-          >
+    <>
+    <View style={{ backgroundColor: '#E5E5E5', marginTop:30 }}>
+      <FlatList
+        data={tasks}
+        keyExtractor={item => String(item.id)}
+        renderItem={({ item, index }) => {
+          return (
             <View 
-              testID={`marker-${index}`}
-              //TODO - use style prop 
-            />
-            <Text 
-              //TODO - use style prop
-            >
-              {item.title}
-            </Text>
-          </TouchableOpacity>
-        )
-      }}
-      ListHeaderComponent={<FlatListHeaderComponent />}
-      ListHeaderComponentStyle={{
-        marginBottom: 20
-      }}
-      style={{
-        marginHorizontal: 24,
-        marginTop: 32
-      }}
-    />
+              style={[index % 2 === 0 
+                ? {backgroundColor: '#C4C4C4'} 
+                : {backgroundColor: '#E5E5E5'}, 
+                styles.taskContainer]}>
+              <TouchableOpacity
+                testID={`button-${index}`}
+                activeOpacity={0.7}
+                onPress={() => onPress(item.id)}
+                style={item.done ? styles.taskButtonDone : styles.taskButton}
+              >
+                <View 
+                  testID={`marker-${index}`}
+                  style={[item.done ? styles.taskMarkerDone : styles.taskMarker, { marginLeft: 10 }]}
+                />
+                <Text 
+                  style={item.done ? styles.taskTextDone : styles.taskText}
+                >
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+              testID={`button-${index}`}
+              activeOpacity={0.2}
+              onPress={() => onLongPress(item.id)}
+              style={{ justifyContent: 'center', marginRight: 15 }}
+              >
+                <Icon name='delete' size={18} />
+              </TouchableOpacity>
+            </View>
+          )
+        }}
+        ListHeaderComponentStyle={{
+          marginBottom: 20,
+        }}
+      />
+    </View>
+    </>
   )
 }
 
@@ -61,6 +76,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Poppins-SemiBold'
   },
+  taskContainer: {
+    flexDirection: 'row',
+  },
   taskButton: {
     flex: 1,
     paddingHorizontal: 10,
@@ -68,18 +86,17 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderRadius: 4,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   taskMarker: {
     height: 16,
     width: 16,
-    borderRadius: 8,
     borderWidth: 1,
     borderColor: '#3D3D4D',
     marginRight: 10
   },
   taskText: {
-    color: '#3D3D4D',
+    color: '#666666',
   },
   taskButtonDone: {
     flex: 1,
@@ -87,19 +104,17 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginBottom: 4,
     borderRadius: 4,
-    backgroundColor: 'rgba(25, 61, 223, 0.1)',
     flexDirection: 'row',
     alignItems: 'center'
   },
   taskMarkerDone: {
     height: 16,
     width: 16,
-    borderRadius: 8,
-    backgroundColor: '#273FAD',
+    backgroundColor: '#1DB863',
     marginRight: 10
   },
   taskTextDone: {
-    color: '#A09CB1',
-    textDecorationLine: 'line-through'
+    color: '#1DB863',
+    textDecorationLine: 'line-through',
   }
 })
