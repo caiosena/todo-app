@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StatusBar, StyleSheet } from 'react-native';
 
-export function Header({counterTasks}) {
+export function Header({counterTasks}: {counterTasks: number}) {
   return (
     <View style={styles.header}>
       <View style={styles.headerNameApp}>

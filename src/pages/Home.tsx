@@ -13,9 +13,10 @@ interface Task {
 
 export function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const counterTasks: number = tasks ? tasks.length : 0;
 
   function handleAddTask(newTaskTitle: string) {
-    if (newTaskTitle) {
+    if (newTaskTitle && newTaskTitle != '') {
       const newTask: Task = 
         { 
           id: new Date().getTime(),
@@ -50,7 +51,7 @@ export function Home() {
 
   return (
     <View style={{ backgroundColor: '#E5E5E5', flex: 1 }}>
-      <Header counterTasks={tasks ? tasks.length : 0} />
+      <Header counterTasks={counterTasks} />
 
       <TodoInput addTask={handleAddTask} />
 
