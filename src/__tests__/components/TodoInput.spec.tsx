@@ -2,6 +2,8 @@ import React from 'react';
 import { TodoInput } from '../../components/TodoInput';
 import { fireEvent, render } from '@testing-library/react-native';
 
+jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon')
+
 describe('TodoInput', () => {
   it('should be able to submit the input text by "submitEditing" event', async () => {
     const mockTodoTask = jest.fn();

@@ -3,6 +3,9 @@ import { render, fireEvent } from '@testing-library/react-native';
 
 import { Home } from '../../pages/Home';
 
+jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon')
+jest.mock('react-native-vector-icons/AntDesign', () => 'Icon')
+
 describe('Home', () => {
   it('should be able to render new added tasks', () => {
     const { getByPlaceholderText, getByText } = render(<Home />);
@@ -52,7 +55,6 @@ describe('Home', () => {
     expect(markerElement).toHaveStyle({
       height: 16,
       width: 16,
-      borderRadius: 8,
       borderWidth: 1,
       borderColor: '#3D3D4D',
       marginRight: 10
@@ -63,14 +65,11 @@ describe('Home', () => {
 
     fireEvent.press(taskElement);
 
-    expect(buttonElement).toHaveStyle({
-      backgroundColor: 'rgba(25, 61, 223, 0.1)'
-    });
     expect(markerElement).toHaveStyle({
-      backgroundColor: '#273FAD'
+      backgroundColor: '#1DB863'
     });
     expect(taskElement).toHaveStyle({
-      color: '#A09CB1',
+      color: '#1DB863',
       textDecorationLine: 'line-through'
     });
   });

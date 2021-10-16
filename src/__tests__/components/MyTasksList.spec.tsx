@@ -12,6 +12,8 @@ let tasks: {
 let mockedOnLongPress: jest.Mock;
 let mockedOnPress: jest.Mock;
 
+jest.mock('react-native-vector-icons/AntDesign', () => 'Icon')
+
 describe('MyTasksList', () => {
 
   beforeAll(() => {
@@ -49,7 +51,7 @@ describe('MyTasksList', () => {
     const { getByText } = render(<MyTasksList tasks={tasks} onLongPress={mockedOnLongPress} onPress={mockedOnPress} />)
     const firstTask = getByText('Primeiro todo');
 
-    fireEvent(firstTask, 'longPress');
+    fireEvent(firstTask, 'onLongPress');
 
     expect(mockedOnLongPress).toHaveBeenCalledWith(tasks[0].id);
   });

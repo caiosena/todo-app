@@ -38,6 +38,7 @@ export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
                 testID={`button-${index}`}
                 activeOpacity={0.7}
                 onPress={() => onPress(item.id)}
+                onLongPress={() => onLongPress(item.id)}
                 style={item.done ? styles.taskButtonDone : styles.taskButton}
               >
                 <View 
@@ -51,7 +52,6 @@ export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-              testID={`button-${index}`}
               activeOpacity={0.2}
               onPress={() => onLongPress(item.id)}
               style={{ justifyContent: 'center', marginRight: 15 }}
@@ -88,16 +88,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  taskMarker: {
-    height: 16,
-    width: 16,
-    borderWidth: 1,
-    borderColor: '#3D3D4D',
-    marginRight: 10
-  },
-  taskText: {
-    color: '#666666',
-  },
   taskButtonDone: {
     flex: 1,
     paddingHorizontal: 10,
@@ -107,11 +97,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  taskMarker: {
+    height: 16,
+    width: 16,
+    borderWidth: 1,
+    borderColor: '#3D3D4D',
+    marginRight: 10
+  },
   taskMarkerDone: {
     height: 16,
     width: 16,
     backgroundColor: '#1DB863',
+    textDecorationLine: 'line-through',
     marginRight: 10
+  },
+  taskText: {
+    color: '#3D3D4D',
   },
   taskTextDone: {
     color: '#1DB863',
