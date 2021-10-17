@@ -52,6 +52,7 @@ export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+              testID={`trash-${index}`}
               activeOpacity={0.2}
               onPress={() => onLongPress(item.id)}
               style={{ justifyContent: 'center', marginRight: 15 }}

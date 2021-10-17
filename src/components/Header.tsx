@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StatusBar, StyleSheet } from 'react-native';
 
 export function Header({counterTasks}: {counterTasks: number}) {
+  const textCounterTasks = counterTasks === 1 ? 'Tarefa' : 'Tarefas';
   return (
     <View style={styles.header}>
       <View style={styles.headerNameApp}>
@@ -10,7 +11,7 @@ export function Header({counterTasks}: {counterTasks: number}) {
       </View>
       <View style={styles.headerCounterTasks}>
         <Text style={styles.headerCounterTasksText}>Você tem {''}</Text>
-        <Text style={[styles.headerCounterTasksText, { fontFamily: 'Poppins-SemiBold' }]}>{counterTasks} tarefas</Text>
+        <Text style={[styles.headerCounterTasksText, { fontFamily: 'Poppins-SemiBold' }]}>{counterTasks} {textCounterTasks}</Text>
       </View>
     </View>
   )

@@ -16,7 +16,7 @@ export function Home() {
   const counterTasks: number = tasks ? tasks.length : 0;
 
   function handleAddTask(newTaskTitle: string) {
-    if (newTaskTitle && newTaskTitle != '') {
+    if (newTaskTitle) {
       const newTask: Task = 
         { 
           id: new Date().getTime(),
