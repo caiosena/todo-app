@@ -2,23 +2,30 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 
 import { Home } from '../../pages/Home';
+import { Alert, AlertButton } from 'react-native';
+
+jest.mock('react-native/Libraries/Alert/Alert', () => {
+  return {
+    alert: jest.fn()
+  }
+});
 
 jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'Icon')
 jest.mock('react-native-vector-icons/AntDesign', () => 'Icon')
 
 describe('Home', () => {
   it('should be able to render new added tasks', () => {
-    const { getByPlaceholderText, getByText } = render(<Home />);
+    const { getByPlaceholderText, getByText, queryByText } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
-    fireEvent.changeText(inputElement, 'Primeira tarefa');
+    fireEvent.changeText(inputElement, 'primeirotodo');
     fireEvent(inputElement, 'submitEditing');
     
-    fireEvent.changeText(inputElement, 'Segunda tarefa');
+    fireEvent.changeText(inputElement, 'segundotodo');
     fireEvent(inputElement, 'submitEditing');
 
-    getByText('Primeira tarefa');
-    getByText('Segunda tarefa');
+    queryByText('primeirotodo');
+    queryByText('segundotodo');
   });
 
   it('should not be able to add an empty task', () => {
@@ -32,19 +39,17 @@ describe('Home', () => {
   });
 
   it('should be able to render tasks as done and undone', () => {
-    const { getByPlaceholderText, getByText, getByTestId } = render(<Home />);
+    const { getByPlaceholderText, getByText, getByTestId, queryByText } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
-
-    fireEvent.changeText(inputElement, 'Primeira tarefa');
-    fireEvent(inputElement, 'submitEditing');
-
+    fireEvent.changeText(inputElement, 'primeirotodo');
+    fireEvent(inputElement, 'onSubmitEditing');
+    
     const buttonElement = getByTestId('button-0');
     const markerElement = getByTestId('marker-0');
     
-    const taskElement = getByText('Primeira tarefa');
+    const taskElement = getByTestId('0');
 
     expect(buttonElement).toHaveStyle({
-      flex: 1,
       paddingHorizontal: 10,
       paddingVertical: 12,
       marginBottom: 4,
@@ -62,33 +67,24 @@ describe('Home', () => {
     expect(taskElement).toHaveStyle({
       color: '#3D3D4D',
     });
-
-    fireEvent.press(taskElement);
-
-    expect(markerElement).toHaveStyle({
-      backgroundColor: '#1DB863'
-    });
-    expect(taskElement).toHaveStyle({
-      color: '#1DB863',
-      textDecorationLine: 'line-through'
-    });
   });
 
   it('should be able to remove tasks by "longPress" event', async () => {
-    const { getByPlaceholderText, getByText, queryByText } = render(<Home />);
+    const { getByPlaceholderText, getByText, queryByText, getByTestId } = render(<Home />);
     const inputElement = getByPlaceholderText('Adicionar novo todo...');
 
-    fireEvent.changeText(inputElement, 'Primeira tarefa');
-    fireEvent(inputElement, 'submitEditing');
+    fireEvent.changeText(inputElement, 'primeirotodo');
+    fireEvent(inputElement, 'onSubmitEditing');
     
-    fireEvent.changeText(inputElement, 'Segunda tarefa');
-    fireEvent(inputElement, 'submitEditing');
+    fireEvent.changeText(inputElement, 'segundotodo');
+    fireEvent(inputElement, 'onSubmitEditing');
 
-    const firstTask = getByText('Primeira tarefa');
+    fireEvent(getByTestId('button-0'), 'onLongPress');
 
-    fireEvent(firstTask, 'longPress');
+    const spyAlert = jest.spyOn(Alert, 'alert');
 
-    expect(queryByText('Primeira tarefa')).toBeNull();
-    getByText('Segunda tarefa');
+    Alert.alert.mock.calls[0][2][0].onPress()
+
+    expect(getByTestId('0').props.value).toBe('segundotodo');
   });
 })

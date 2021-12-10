@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Image, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-
-import checkIcon from '../assets/icons/Check.png';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface TodoInputProps {

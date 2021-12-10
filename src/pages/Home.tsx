@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { Header } from '../components/Header';
-import { MyTasksList } from '../components/MyTasksList';
+import { TasksList } from '../components/TasksList';
 import { TodoInput } from '../components/TodoInput';
 
 interface Task {
@@ -16,6 +16,13 @@ export function Home() {
   const counterTasks: number = tasks ? tasks.length : 0;
 
   function handleAddTask(newTaskTitle: string) {
+    const existsTask = tasks.find(item => item.title === newTaskTitle);
+
+    if (existsTask) {
+      Alert.alert('Task já cadastrada', 'Não é possível cadastrar uma task com o mesmo nome');
+      return;
+    }
+      
     if (newTaskTitle) {
       const newTask: Task = 
         { 
@@ -24,6 +31,26 @@ export function Home() {
           done: false,
         }
       setTasks([...tasks, newTask]);
+    }
+  }
+
+  function handleEditTask(item: {taskId: number, newTaskTitle: string}) {
+    const {taskId, newTaskTitle} = item;
+    const existsTask = tasks.find(item => item.title === newTaskTitle);
+
+    if (existsTask) {
+      Alert.alert('Task já cadastrada', 'Você não pode cadastrar uma task com o mesmo nome');
+      return;
+    }
+      
+    if (taskId) {
+      const updateTasks = tasks.map(
+        task => 
+        {
+          if (task.id === taskId) task.title = newTaskTitle;
+          return task;
+        });
+      setTasks(updateTasks);
     }
   }
 
@@ -40,13 +67,28 @@ export function Home() {
   }
 
   function handleRemoveTask(id: number) {
-    if (id) {
-      const removedTask = tasks.filter(
-        value => {
-          if(value.id !== id) return value;
-        });
-      setTasks(removedTask);
-    }
+    Alert.alert(
+      'Remover item',
+      'Tem certeza que você deseja remover esse item?',
+      [
+        {
+          text: "Sim",
+          onPress: () => {
+            if (id) {
+              const removedTask = tasks.filter(
+                value => {
+                  if(value.id !== id) return value;
+                });
+              setTasks(removedTask);
+            }
+          }
+        },
+        {
+          text: "Não",
+          onPress: () => {},
+        },
+      ]
+    );
   }
 
   return (
@@ -55,10 +97,11 @@ export function Home() {
 
       <TodoInput addTask={handleAddTask} />
 
-      <MyTasksList 
+      <TasksList 
         tasks={tasks} 
-        onPress={handleMarkTaskAsDone} 
-        onLongPress={handleRemoveTask} 
+        toggleTaskDone={handleMarkTaskAsDone} 
+        removeTask={handleRemoveTask} 
+        editTask={handleEditTask}
       />
     </View>
   )
